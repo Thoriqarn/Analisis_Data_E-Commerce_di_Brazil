@@ -36,6 +36,8 @@ import streamlit as st
 from wordcloud import WordCloud
 import plotly.express as px
 
+pip freeze requirements.txt
+
 """## Data Wrangling
 
 ### Gathering Data
