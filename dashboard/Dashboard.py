@@ -20,8 +20,6 @@ Original file is located at
 ## Import Semua Packages/Library yang Digunakan
 """
 
-!pip install geopandas folium streamlit wordcloud plotly
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
