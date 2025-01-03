@@ -8,7 +8,8 @@ Original file is located at
 
 # Proyek Analisis Data: E-Commerce Public Dataset
 - **Nama:** Mohamad Thoriq Abdurachman
-- **Email:** mohamadthoriq28@gmail.com
+- **Email:** mohamadthoriq09@gmail.com
+- **ID Dicoding:** thoriq09
 
 ## Menentukan Pertanyaan Bisnis
 
