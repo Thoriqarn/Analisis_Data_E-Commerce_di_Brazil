@@ -1123,9 +1123,9 @@ Berdasarkan hasil analisis, terdapat kategori produk tertentu yang memiliki juml
 ##2. Pola Ulasan Pelanggan
 Pola ulasan menunjukkan adanya bias pada skor ulasan pelanggan yang cenderung tinggi. Namun, ulasan dengan nilai rendah seringkali memberikan informasi yang lebih mendetail mengenai kekurangan produk atau layanan. Hal ini menunjukkan pentingnya meninjau ulasan rendah untuk perbaikan layanan.
 
-##3. Performa Penjual Terbaik:
+##3. Performa Penjual Terbaik
 Penjual dengan performa terbaik diidentifikasi berdasarkan jumlah penjualan mereka. Pengetahuan ini dapat membantu perusahaan dalam merancang program loyalitas atau kolaborasi khusus dengan penjual yang berkontribusi besar terhadap penjualan keseluruhan.
 
-##4. Analisis Geospasial:
+##4. Analisis Geospasial
 Pemanfaatan analisis geospasial mengungkapkan area dengan konsentrasi pelanggan yang tinggi. Area ini berpotensi untuk menjadi fokus strategi pemasaran dan pengembangan layanan logistik yang lebih baik.
 """
