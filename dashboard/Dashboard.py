@@ -925,11 +925,13 @@ if page_choice == "Data Wrangling":
     print("\nStatistik Skor Ulasan:")
     print(reviews_df['review_score'].describe())
     print("\nVisualisasi Penyebaran Skor Ulasan:")
-    st.histplot(reviews_df['review_score'], bins=5, kde=False)
+    sns.histplot(reviews_df['review_score'], bins=5, kde=False)
     st.title("Penyebaran Skor Ulasan")
     st.xlabel("Skor")
     st.ylabel("Frekuensi")
-    st.show()
+    # st.show()
+    st.pyplot(plt.fig)
+    
     
     """**Insight:**
     - Terdapat kolom dengan nilai kosong yang jumlahnya cukup banyak.
