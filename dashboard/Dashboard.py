@@ -925,7 +925,7 @@ if page_choice == "Data Wrangling":
     print("\nStatistik Skor Ulasan:")
     print(reviews_df['review_score'].describe())
     print("\nVisualisasi Penyebaran Skor Ulasan:")
-    st.hist(reviews_df['review_score'], bins=5, kde=False)
+    st.histplot(reviews_df['review_score'], bins=5, kde=False)
     st.title("Penyebaran Skor Ulasan")
     st.xlabel("Skor")
     st.ylabel("Frekuensi")
