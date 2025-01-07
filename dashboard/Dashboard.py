@@ -41,56 +41,56 @@ import plotly.express as px
 ### Gathering Data
 """
 
-order_items_df = pd.read_csv ("../dataset/order_items_dataset.csv")
+order_items_df = pd.read_csv ("dataset/order_items_dataset.csv")
 order_items_df.head()
 
 """**Fungsi:**
 Berisi rincian barang yang dipesan.
 """
 
-products_df = pd.read_csv ("../dataset/products_dataset.csv")
+products_df = pd.read_csv ("dataset/products_dataset.csv")
 products_df.head()
 
 """**Fungsi:**
 Menyediakan informasi produk.
 """
 
-reviews_df = pd.read_csv ("../dataset/order_reviews_dataset.csv")
+reviews_df = pd.read_csv ("dataset/order_reviews_dataset.csv")
 reviews_df.head()
 
 """**Fungsi:**
 Berisi ulasan pelanggan.
 """
 
-sellers_df = pd.read_csv ("../dataset/sellers_dataset.csv")
+sellers_df = pd.read_csv ("dataset/sellers_dataset.csv")
 sellers_df.head()
 
 """**Fungsi:**
 Berisi informasi penjual.
 """
 
-orders_df = pd.read_csv ("../dataset/orders_dataset.csv")
+orders_df = pd.read_csv ("dataset/orders_dataset.csv")
 orders_df.head()
 
 """**Fungsi:**
 Berisi informasi terkait pesanan.
 """
 
-geoloc_df = pd.read_csv ("../dataset/geolocation_dataset.csv")
+geoloc_df = pd.read_csv ("dataset/geolocation_dataset.csv")
 geoloc_df.head()
 
 """**Fungsi:**
 Berisi data lokasi geografis.
 """
 
-customers_df = pd.read_csv ("../dataset/customers_dataset.csv")
+customers_df = pd.read_csv ("dataset/customers_dataset.csv")
 customers_df.head()
 
 """**Fungsi:**
 Berisi informasi pelanggan.
 """
 
-payments_df = pd.read_csv ("../dataset/order_payments_dataset.csv")
+payments_df = pd.read_csv ("dataset/order_payments_dataset.csv")
 payments_df.head()
 
 """**Fungsi:**
