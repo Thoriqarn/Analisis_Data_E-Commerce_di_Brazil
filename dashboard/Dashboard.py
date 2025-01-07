@@ -1118,7 +1118,7 @@ pages = ["Data Wrangling", "EDA", "RFM Analysis", "Visualisasi"]
 page_choice = st.sidebar.radio("Pilih Halaman:", pages)
 
 # Fungsi untuk memuat dataset
-@st.cache
+# @st.cache
 def load_data():
     order_items_df = pd.read_csv("dataset/order_items_dataset.csv")
     products_df = pd.read_csv("dataset/products_dataset.csv")
