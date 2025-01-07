@@ -1254,7 +1254,8 @@ elif page_choice == "Visualisasi":
 
 st.sidebar.info("Gunakan menu di atas untuk menjelajahi analisis.")
 
-"""**Insight:**
+"""
+    **Insight:**
 - Titik-titik yang lebih padat pada peta menunjukkan area dengan konsentrasi pelanggan yang lebih tinggi. Lokasi ini bisa menjadi indikasi bahwa area tersebut memiliki permintaan yang lebih besar atau lebih banyak pelanggan yang melakukan pembelian.
 
 ## Conclusion
