@@ -20,7 +20,7 @@ Original file is located at
 ## Import Semua Packages/Library yang Digunakan
 """
 
-!pip install geopandas folium streamlit wordcloud plotly
+!pip install -r requirements.txt
 
 import pandas as pd
 import numpy as np
@@ -35,8 +35,6 @@ from datetime import datetime
 import streamlit as st
 from wordcloud import WordCloud
 import plotly.express as px
-
-pip freeze requirements.txt
 
 """## Data Wrangling
 
