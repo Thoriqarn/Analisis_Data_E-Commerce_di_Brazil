@@ -1108,24 +1108,16 @@ import plotly.express as px
 # plt.grid(True)
 # plt.show()
 
-# Menjalankan pada Streamlit
 # Judul Aplikasi
-st.title("Dashboard Analisis Data E-Commerce di Brazil")
+st.title("Analisis Data E-Commerce di Brasil")
+st.write("Proyek ini menganalisis data e-commerce untuk memberikan insight bisnis.")
 
-# Sidebar Navigasi
+# Sidebar untuk navigasi
 st.sidebar.title("Navigasi")
-option = st.sidebar.selectbox(
-    "Pilih Analisis:",
-    [
-        "Pendahuluan",
-        "Pembersihan Data",
-        "Analisis Data (EDA)",
-        "Analisis RFM",
-        "Analisis Geospasial",
-    ]
-)
+pages = ["Data Wrangling", "EDA", "RFM Analysis", "Visualisasi"]
+page_choice = st.sidebar.radio("Pilih Halaman:", pages)
 
-# Load Dataset
+# Fungsi untuk memuat dataset
 @st.cache
 def load_data():
     order_items_df = pd.read_csv("dataset/order_items_dataset.csv")
@@ -1140,70 +1132,131 @@ def load_data():
 
 order_items_df, products_df, reviews_df, sellers_df, orders_df, geoloc_df, customers_df, payments_df = load_data()
 
-# Pendahuluan
-if option == "Pendahuluan":
-    st.subheader("Pendahuluan")
-    st.write("Proyek ini bertujuan untuk menganalisis data e-commerce di Brasil menggunakan berbagai metode analitik. Data mencakup informasi pesanan, produk, ulasan, penjual, dan pelanggan.")
+# Fungsi untuk pembersihan data
+@st.cache
+def clean_data(order_items_df, products_df, reviews_df, sellers_df, orders_df, geoloc_df, customers_df, payments_df):
+    # Pembersihan order_items_df
+    Q1_price = order_items_df['price'].quantile(0.25)
+    Q3_price = order_items_df['price'].quantile(0.75)
+    IQR_price = Q3_price - Q1_price
 
-# Pembersihan Data
-elif option == "Pembersihan Data":
-    st.subheader("Pembersihan Data")
-    st.write("Tabel Order Items Sebelum Dibersihkan:")
+    Q1_fr = order_items_df['freight_value'].quantile(0.25)
+    Q3_fr = order_items_df['freight_value'].quantile(0.75)
+    IQR_fr = Q3_fr - Q1_fr
+
+    order_items_df = order_items_df[
+        (order_items_df['price'] >= (Q1_price - 1.5 * IQR_price)) &
+        (order_items_df['price'] <= (Q3_price + 1.5 * IQR_price)) &
+        (order_items_df['freight_value'] >= (Q1_fr - 1.5 * IQR_fr)) &
+        (order_items_df['freight_value'] <= (Q3_fr + 1.5 * IQR_fr))
+    ]
+
+    # Pembersihan products_df
+    products_df['product_category_name'] = products_df['product_category_name'].fillna('unknown')
+    important_columns = ['product_weight_g', 'product_length_cm', 'product_height_cm', 'product_width_cm']
+    products_df = products_df.dropna(subset=important_columns)
+
+    # Pembersihan reviews_df
+    reviews_df[['review_comment_title', 'review_comment_message']] = reviews_df[['review_comment_title', 'review_comment_message']].fillna('')
+
+    # Pembersihan orders_df
+    orders_df['order_status'] = orders_df['order_status'].fillna("unknown")
+    date_col = [
+        'order_purchase_timestamp',
+        'order_approved_at',
+        'order_delivered_carrier_date',
+        'order_delivered_customer_date',
+        'order_estimated_delivery_date'
+    ]
+    for col in date_col:
+        orders_df[col] = pd.to_datetime(orders_df[col], errors='coerce')
+        orders_df[col] = orders_df[col].fillna(pd.Timestamp("1970-01-01"))
+
+    # Pembersihan geoloc_df
+    geoloc_df = geoloc_df.drop_duplicates()
+
+    # Pembersihan payments_df
+    Q1_payment = payments_df['payment_value'].quantile(0.25)
+    Q3_payment = payments_df['payment_value'].quantile(0.75)
+    IQR_payment = Q3_payment - Q1_payment
+    payments_df = payments_df[
+        (payments_df['payment_value'] >= (Q1_payment - 1.5 * IQR_payment)) &
+        (payments_df['payment_value'] <= (Q3_payment + 1.5 * IQR_payment))
+    ]
+
+    return order_items_df, products_df, reviews_df, sellers_df, orders_df, geoloc_df, customers_df, payments_df
+
+order_items_df, products_df, reviews_df, sellers_df, orders_df, geoloc_df, customers_df, payments_df = clean_data(
+    order_items_df, products_df, reviews_df, sellers_df, orders_df, geoloc_df, customers_df, payments_df
+)
+
+# Tampilan halaman "Data Wrangling"
+if page_choice == "Data Wrangling":
+    st.subheader("Data Wrangling")
+    st.write("### Dataset: Order Items")
     st.dataframe(order_items_df.head())
+    st.write("### Informasi Data:")
+    buffer = []
+    order_items_df.info(buf=buffer)
+    info_str = "\n".join(buffer)
+    st.text(info_str)
 
-    # Cleaning data contoh (seperti pada skrip Anda)
-    cleaned_order_items_df = order_items_df[order_items_df['price'] > 0]
-    st.write("Tabel Order Items Setelah Dibersihkan:")
-    st.dataframe(cleaned_order_items_df.head())
+# Halaman "EDA"
+elif page_choice == "EDA":
+    st.subheader("Exploratory Data Analysis (EDA)")
 
-# Analisis Data (EDA)
-elif option == "Analisis Data (EDA)":
-    st.subheader("Analisis Data (EDA)")
-
-    # Contoh: Distribusi Harga
-    st.write("Distribusi Harga Barang dalam Pesanan:")
+    # Visualisasi Distribusi Harga
+    st.write("### Distribusi Harga Produk")
     fig, ax = plt.subplots()
-    sns.histplot(cleaned_order_items_df['price'], bins=30, kde=True, ax=ax)
-    plt.title("Penyebaran Harga Barang dalam Pesanan")
+    sns.histplot(order_items_df['price'], bins=30, kde=True, ax=ax)
+    ax.set_title("Distribusi Harga Produk")
+    ax.set_xlabel("Harga")
+    ax.set_ylabel("Frekuensi")
     st.pyplot(fig)
 
-    # Analisis Produk Terlaris
-    st.write("Top 10 Produk Terlaris:")
-    top_products = (
-        cleaned_order_items_df.groupby("product_id")["order_item_id"].count().nlargest(10)
-    )
-    st.dataframe(top_products)
+    # Visualisasi Kategori Produk
+    st.write("### Jumlah Produk per Kategori")
+    product_counts = products_df['product_category_name'].value_counts()
+    fig = px.bar(product_counts, x=product_counts.index, y=product_counts.values, labels={'x': 'Kategori', 'y': 'Jumlah'})
+    st.plotly_chart(fig)
 
-# Analisis RFM
-elif option == "Analisis RFM":
-    st.subheader("Analisis RFM")
-    st.write("Segmentasi pelanggan berdasarkan Recency, Frequency, dan Monetary.")
+# Halaman "RFM Analysis"
+elif page_choice == "RFM Analysis":
+    st.subheader("Analisis RFM (Recency, Frequency, Monetary)")
 
-    # Contoh perhitungan RFM (berdasarkan skrip Anda)
     latest_order_date = pd.to_datetime(orders_df['order_purchase_timestamp']).max()
+    orders_df['order_purchase_timestamp'] = pd.to_datetime(orders_df['order_purchase_timestamp'])
     rfm = customers_df.merge(orders_df, on='customer_id').merge(order_items_df, on='order_id')
-    rfm['recency'] = (latest_order_date - pd.to_datetime(rfm['order_purchase_timestamp'])).dt.days
+
+    rfm['recency'] = (latest_order_date - rfm['order_purchase_timestamp']).dt.days
     rfm_frequency = rfm.groupby('customer_unique_id')['order_id'].nunique().reset_index()
     rfm_frequency.rename(columns={'order_id': 'frequency'}, inplace=True)
     rfm_monetary = rfm.groupby('customer_unique_id')['price'].sum().reset_index()
     rfm_monetary.rename(columns={'price': 'monetary'}, inplace=True)
-    rfm_combined = rfm[['customer_unique_id', 'recency']].drop_duplicates()
-    rfm_combined = rfm_combined.merge(rfm_frequency, on='customer_unique_id').merge(rfm_monetary, on='customer_unique_id')
 
-    st.write("Data RFM:")
-    st.dataframe(rfm_combined.head())
+    st.write("### Distribusi RFM Metrics")
+    fig, ax = plt.subplots()
+    sns.histplot(rfm_frequency['frequency'], bins=20, kde=True, ax=ax, label='Frequency', color='green')
+    sns.histplot(rfm_monetary['monetary'], bins=20, kde=True, ax=ax, label='Monetary', color='orange')
+    ax.legend()
+    st.pyplot(fig)
 
-# Analisis Geospasial
-elif option == "Analisis Geospasial":
-    st.subheader("Analisis Geospasial")
-    st.write("Peta Distribusi Pelanggan di Brasil.")
+# Halaman "Visualisasi"
+elif page_choice == "Visualisasi":
+    st.subheader("Visualisasi Data")
+    st.write("### Word Cloud untuk Komentar Ulasan")
+    comment_txt = " ".join(reviews_df['review_comment_message'].dropna())
+    wordcloud = WordCloud(width=800, height=400, background_color='white').generate(comment_txt)
+    plt.figure(figsize=(10, 5))
+    plt.imshow(wordcloud, interpolation='bilinear')
+    plt.axis('off')
+    st.pyplot(plt)
 
-    # Data Geospasial (dari geoloc_df)
-    customer_locations = customers_df.merge(geoloc_df, left_on='customer_zip_code_prefix', right_on='geolocation_zip_code_prefix')
-    st.map(customer_locations[['geolocation_lat', 'geolocation_lng']])
+    st.write("### Distribusi Lokasi Pelanggan")
+    fig = px.scatter_geo(geoloc_df, lat='geolocation_lat', lon='geolocation_lng', opacity=0.4)
+    st.plotly_chart(fig)
 
-# Footer
-st.sidebar.info("Aplikasi ini dibuat menggunakan Streamlit.")
+st.sidebar.info("Gunakan menu di atas untuk menjelajahi analisis.")
 
 """**Insight:**
 - Titik-titik yang lebih padat pada peta menunjukkan area dengan konsentrasi pelanggan yang lebih tinggi. Lokasi ini bisa menjadi indikasi bahwa area tersebut memiliki permintaan yang lebih besar atau lebih banyak pelanggan yang melakukan pembelian.
