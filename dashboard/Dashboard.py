@@ -932,7 +932,7 @@ if page_choice == "Data Wrangling":
     # # st.show()
     # st.pyplot(plt.fig)
     fig, ax = plt.subplots()
-    ax.hist(reviews_df['review_score'], bins=5, kde=False)
+    ax.hist(reviews_df['review_score'], bins=5)
     st.pyplot(fig)
     
     """**Insight:**
