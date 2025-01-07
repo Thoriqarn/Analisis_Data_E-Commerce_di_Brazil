@@ -20,7 +20,7 @@ Original file is located at
 ## Import Semua Packages/Library yang Digunakan
 """
 
-!pip install -r requirements.txt
+# ! pip install -r requirements.txt
 
 import pandas as pd
 import numpy as np
