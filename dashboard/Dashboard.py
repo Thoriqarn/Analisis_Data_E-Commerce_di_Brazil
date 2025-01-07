@@ -1195,7 +1195,7 @@ if page_choice == "Data Wrangling":
     st.pyplot(plt.gcf())
     """**Insight:**
     Membersihkan outlier yang ada pada kolom 'payment_value'.
-
+    """
 
 # Halaman "EDA"
 elif page_choice == "EDA":
