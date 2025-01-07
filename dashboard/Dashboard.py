@@ -36,391 +36,6 @@ import streamlit as st
 from wordcloud import WordCloud
 import plotly.express as px
 
-# """## Data Wrangling
-
-# ### Gathering Data
-# """
-
-# order_items_df = pd.read_csv ("dataset/order_items_dataset.csv")
-# order_items_df.head()
-
-# """**Fungsi:**
-# Berisi rincian barang yang dipesan.
-# """
-
-# products_df = pd.read_csv ("dataset/products_dataset.csv")
-# products_df.head()
-
-# """**Fungsi:**
-# Menyediakan informasi produk.
-# """
-
-# reviews_df = pd.read_csv ("dataset/order_reviews_dataset.csv")
-# reviews_df.head()
-
-# """**Fungsi:**
-# Berisi ulasan pelanggan.
-# """
-
-# sellers_df = pd.read_csv ("dataset/sellers_dataset.csv")
-# sellers_df.head()
-
-# """**Fungsi:**
-# Berisi informasi penjual.
-# """
-
-# orders_df = pd.read_csv ("dataset/orders_dataset.csv")
-# orders_df.head()
-
-# """**Fungsi:**
-# Berisi informasi terkait pesanan.
-# """
-
-# geoloc_df = pd.read_csv ("dataset/geolocation_dataset.csv")
-# geoloc_df.head()
-
-# """**Fungsi:**
-# Berisi data lokasi geografis.
-# """
-
-# customers_df = pd.read_csv ("dataset/customers_dataset.csv")
-# customers_df.head()
-
-# """**Fungsi:**
-# Berisi informasi pelanggan.
-# """
-
-# payments_df = pd.read_csv ("dataset/order_payments_dataset.csv")
-# payments_df.head()
-
-# """**Fungsi:**
-# Berisi detail pembayaran.
-
-# ### Assessing Data
-
-# ####Menilai Tabel order_items_df
-# """
-
-# print("Informasi Tabel:")
-# print(order_items_df.info())
-# print("\nStatistik Deskriptif:")
-# print(order_items_df.describe())
-# print("\nJumlah Nilai Kosong:")
-# print(order_items_df.isnull().sum())
-# print("\nJumlah Baris Duplikat:")
-# print(order_items_df.duplicated().sum())
-# print("\nMengecek Harga Negatif (Kurang Dari 0):")
-# print(order_items_df[order_items_df['price'] < 0])
-# print("\nVisualisasi Outlier Kolom 'price':")
-# sns.boxplot(data=order_items_df, x='price')
-# plt.title("Boxplot Harga")
-# plt.show()
-
-# """**Insight:**
-# - Tidak ada nilai kosong.
-# - Tidak ada duplikasi data.
-# - Tidak ada harga bernilai negatif.
-# - Menunjukkan potensi outlier, karena harga produk memiliki nilai maksimum yang sangat tinggi dan melebihi nilai pada kuartil tiga. Selain itu, biaya pengiriman juga memiliki nilai maksimum yang sangat tinggi dan melebihi nilai pada kuartil tiga.
-
-# ####Menilai Tabel products_df
-# """
-
-# print("Informasi Tabel:")
-# print(products_df.info())
-# print("\nJumlah Nilai Kosong:")
-# print(products_df.isnull().sum())
-# print("\nJumlah Baris Duplikat:")
-# print(products_df.duplicated().sum())
-# print("\nKategori Produk Unik:")
-# print("Jumlah =", products_df['product_category_name'].nunique())
-# print(products_df['product_category_name'].unique())
-
-# """**Insight:**
-# - Terdapat kolom yang memiliki nilai kosong.
-# - Tidak ada duplikasi data.
-# - Terdapat nilai nan pada kategori produk.
-
-# ####Menilai Tabel reviews_df
-# """
-
-# print("Informasi Tabel:")
-# print(reviews_df.info())
-# print("\nJumlah Nilai Kosong:")
-# print(reviews_df.isnull().sum())
-# print("\nJumlah Baris Duplikat:")
-# print(reviews_df.duplicated().sum())
-# print("\nStatistik Skor Ulasan:")
-# print(reviews_df['review_score'].describe())
-# print("\nVisualisasi Penyebaran Skor Ulasan:")
-# sns.histplot(reviews_df['review_score'], bins=5, kde=False)
-# plt.title("Penyebaran Skor Ulasan")
-# plt.xlabel("Skor")
-# plt.ylabel("Frekuensi")
-# plt.show()
-
-# """**Insight:**
-# - Terdapat kolom dengan nilai kosong yang jumlahnya cukup banyak.
-# - Tidak ada duplikasi data.
-# - Skor ulasan yang cenderung tinggi menunjukkan adanya kemungkinan bias data.
-
-# ####Menilai Tabel sellers_df
-# """
-
-# print("Informasi Tabel:")
-# print(sellers_df.info())
-# print("\nJumlah Nilai Kosong:")
-# print(sellers_df.isnull().sum())
-# print("\nJumlah Baris Duplikat:")
-# print(sellers_df.duplicated().sum())
-# print("\nValidasi Lokasi Penjual:")
-# print("Jumlah =", sellers_df['seller_zip_code_prefix'].nunique())
-# print(sellers_df['seller_zip_code_prefix'].unique())
-
-# """**Insight:**
-# - Tidak ada kolom dengan nilai kosong.
-# - Tidak ada duplikasi data.
-# - Banyaknya jumlah lokasi penjual menunjukkan distribusi lokasi penjual yang beragam.
-# - Tabel sudah bersih dan dapat digunakan.
-
-# ####Menilai Tabel orders_df
-# """
-
-# print("Informasi Tabel:")
-# print(orders_df.info())
-# print("\nJumlah Nilai Kosong:")
-# print(orders_df.isnull().sum())
-# print("\nJumlah Baris Duplikat:")
-# print(orders_df.duplicated().sum())
-# print("\nValidasi Status Pesanan:")
-# print("Jumlah =", orders_df['order_status'].nunique())
-# print(orders_df['order_status'].unique())
-
-# """**Insight:**
-# - Terdapat kolom dengan nilai kosong.
-# - Tidak ada dupilkasi data.
-# - Terdapat 8 kategori status pesanan.
-
-# ####Menilai Tabel geoloc_df
-# """
-
-# print("Informasi Tabel:")
-# print(geoloc_df.info())
-# print("\nJumlah Nilai Kosong:")
-# print(geoloc_df.isnull().sum())
-# print("\nJumlah Baris Duplikat:")
-# print(geoloc_df.duplicated().sum())
-# print("\nValidasi Kode Pos Unik:")
-# print("Jumlah =", geoloc_df['geolocation_zip_code_prefix'].nunique())
-# print(geoloc_df['geolocation_zip_code_prefix'].unique())
-
-# """**Insight:**
-# - Tidak ada kolom dengan nilai kosong.
-# - Terdapat duplikasi data berdasarkan semua kolom.
-
-# ####Menilai Tabel customers_df
-# """
-
-# print("Informasi Tabel:")
-# print(customers_df.info())
-# print("\nJumlah Nilai Kosong:")
-# print(customers_df.isnull().sum())
-# print("\nJumlah Baris Duplikat:")
-# print(customers_df.duplicated().sum())
-# print("\nValidasi ID Pelanggan:")
-# print("Jumlah =", customers_df['customer_id'].nunique())
-# print(customers_df['customer_id'].unique())
-
-# """**Insight:**
-# - Tidak terdapat kolom dengan nilai kosong.
-# - Tidak ada dupilkasi data.
-# - Tabel sudah bersih dan dapat digunakan.
-
-# ####Menilai Tabel payments_df
-# """
-
-# print("Informasi Tabel:")
-# print(payments_df.info())
-# print("\nJumlah Nilai Kosong:")
-# print(payments_df.isnull().sum())
-# print("\nJumlah Baris Duplikat:")
-# print(payments_df.duplicated().sum())
-# print("\nStatistik Jumlah Pembayaran:")
-# print(payments_df['payment_value'].describe())
-# print("\nVisualisasi Penyebaran Nilai Pembayaran:")
-# sns.histplot(payments_df['payment_value'], kde=True)
-# plt.title("Penyebaran Nilai Pembayaran")
-# plt.xlabel("Nilai Pembayaran")
-# plt.ylabel("Frekuensi")
-# plt.show()
-
-# """**Insight:**
-# - Tidak terdapat kolom dengan nilai kosong.
-# - Tidak ada dupilkasi data.
-# - Menunjukkan potensi outlier, karena kolom 'payment_value' memiliki nilai maksimum yang sangat tinggi dan melebihi nilai pada kuartil tiga.
-
-# ### Cleaning Data
-
-# ####Membersihkan Tabel order_items_df
-# """
-
-# #Mengatasi Potensi Outlier
-# Q1_price = order_items_df['price'].quantile(0.25)
-# Q3_price = order_items_df['price'].quantile(0.75)
-# IQR_price = Q3_price - Q1_price
-
-# Q1_fr = order_items_df['freight_value'].quantile(0.25)
-# Q3_fr = order_items_df['freight_value'].quantile(0.75)
-# IQR_fr = Q3_fr - Q1_fr
-
-# #Filter Outlier
-# cleaned_order_items_df = order_items_df[
-#     (order_items_df['price'] >= (Q1_price - 1.5 * IQR_price)) &
-#     (order_items_df['price'] <= (Q3_price + 1.5 * IQR_price)) &
-#     (order_items_df['freight_value'] >= (Q1_fr - 1.5 * IQR_fr)) &
-#     (order_items_df['freight_value'] <= (Q3_fr + 1.5 * IQR_fr))
-# ]
-
-# print("Statistik Deskriptif Setelah Dibersihkan:")
-# cleaned_order_items_df.describe()
-
-# """**Insight:**
-# Membersihkan outlier yang ada pada kolom 'price' dan 'freight_value'.
-
-# ####Membersihkan Tabel products_df
-# """
-
-# #Menyalin DataFrame
-# cleaned_products_df = products_df.copy()
-
-# # Mengisi Nilai Kosong
-# if 'product_category_name' in cleaned_products_df.columns:
-#     cleaned_products_df['product_category_name'] = cleaned_products_df['product_category_name'].fillna('unknown')
-
-# cleaned_products_df[['product_name_lenght', 'product_description_lenght', 'product_photos_qty']] = cleaned_products_df[['product_name_lenght', 'product_description_lenght', 'product_photos_qty']].fillna(0)
-
-# # Menghapus Baris dengan Nilai Kosong pada Kolom Ukuran Produk
-# important_columns = ['product_weight_g', 'product_length_cm', 'product_height_cm', 'product_width_cm']
-# cleaned_products_df = cleaned_products_df.dropna(subset=important_columns)
-# cleaned_products_df
-
-# print(cleaned_products_df.head())
-# print("\nJumlah Nilai Kosong Setelah Pembersihan:")
-# print(cleaned_products_df.isna().sum())
-# print("\nKategori Produk Unik Setelah Pembersihan:")
-# print("Jumlah =", cleaned_products_df['product_category_name'].nunique())
-# print(cleaned_products_df['product_category_name'].unique())
-
-# """**Insight:**
-# - Nilai kosong pada kolom kategori diisi dengan 'unknown'.
-# - Kolom dimensi produk yang kosong dihapus.
-
-# ####Membersihkan Tabel reviews_df
-# """
-
-# #Menyalin DataFrame
-# cleaned_reviews_df = reviews_df.copy()
-
-# #Mengisi Nilai Kosong
-# cleaned_reviews_df[['review_comment_title', 'review_comment_message']] = cleaned_reviews_df[['review_comment_title', 'review_comment_message']].fillna('')
-
-# print(cleaned_reviews_df.head())
-# print("\nJumlah Nilai Kosong Setelah Pembersihan:")
-# print(cleaned_reviews_df.isna().sum())
-
-# """**Insight:**
-# Kolom ulasan yang kosong diisi dengan string kosong untuk menghindari kesalahan saat analisis data.
-
-# ####Membersihkan Tabel orders_df
-# """
-
-# # Mengisi Nilai Kosong dengan Placeholder
-# orders_df['order_status'] = orders_df['order_status'].fillna("unknown")
-
-# # Mengubah Tipe Data dan Nilai pada Kolom Tanggal
-# date_col = [
-#     'order_purchase_timestamp',
-#     'order_approved_at',
-#     'order_delivered_carrier_date',
-#     'order_delivered_customer_date',
-#     'order_estimated_delivery_date'
-# ]
-
-# for col in date_col:
-#     orders_df[col] = pd.to_datetime(orders_df[col], errors='coerce')  # Tipe Data Menjadi Datetime dan Nilai invalid Menjadi NaT
-#     orders_df[col] = orders_df[col].fillna(pd.Timestamp("1970-01-01"))  # Ganti NaT dengan nilai default
-
-# # Mengisi Nilai Kosong dengan Placeholder
-# orders_df['order_id'] = orders_df['order_id'].fillna("unknown")
-# orders_df['customer_id'] = orders_df['customer_id'].fillna("unknown")
-
-# print("Data setelah cleaning:")
-# print(orders_df)
-# print(orders_df.info())
-# print(orders_df.isna().sum())
-
-# #Memastikan Data pada Tiap Status Tidak Terhapus
-# for status in orders_df['order_status'].unique():
-#     print(f"Contoh data untuk order_status: {status}")
-#     print(orders_df[orders_df['order_status'] == status].head(), "\n")
-
-# """**Insight:**
-# Mengubah tipe data dengan tipe yang lebih sesuai dan mengisi nilai kosong pada tiap kolom dengan placeholder agar data dapat digunakan untuk analisis.
-
-# ####Membersihkan Tabel geoloc_df
-# """
-
-# print("Memeriksa Baris Duplikat:")
-# print(geoloc_df.duplicated())
-
-# # Menambahkan Kolom 'frequency' untuk Menghitung Kemunculan Tiap Kombinasi Unik
-# geoloc_df['frequency'] = geoloc_df.groupby(list(geoloc_df.columns)).transform('size')
-
-# # Menghapus Baris Duplikasi
-# geoloc_df = geoloc_df.drop_duplicates()
-
-# print("\n Isi Tabel Setelah Dibersihkan:")
-# print(geoloc_df.head())
-# print("\nInformasi Tabel:")
-# print(geoloc_df.info())
-# print("\nJumlah Nilai Kosong:")
-# print(geoloc_df.isnull().sum())
-# print("\nJumlah Baris Duplikat:")
-# print(geoloc_df.duplicated().sum())
-# print("\nValidasi Kode Pos Unik:")
-# print("Jumlah =", geoloc_df['geolocation_zip_code_prefix'].nunique())
-# print(geoloc_df['geolocation_zip_code_prefix'].unique())
-
-# """**Insight:**
-# - Menambahkan kolom baru bernama 'frequency' untuk menghitung kemunculan tiap kombinasi unik.
-# - Menghapus dupilkasi data.
-
-# ####Membersihkan Tabel payments_df
-# """
-
-# #Mengatasi Potensi Outlier
-# Q1_payment = payments_df['payment_value'].quantile(0.25)
-# Q3_payment = payments_df['payment_value'].quantile(0.75)
-# IQR_payment = Q3_payment - Q1_payment
-
-# #Filter Outlier
-# cleaned_payments_df = payments_df[
-#     (payments_df['payment_value'] >= (Q1_payment - 1.5 * IQR_payment)) &
-#     (payments_df['payment_value'] <= (Q3_payment + 1.5 * IQR_payment))
-# ]
-
-# print("Statistik Deskriptif Setelah Dibersihkan:")
-# cleaned_payments_df.describe()
-
-# print("\nVisualisasi Penyebaran Nilai Pembayaran Setelah Dibersihkan:")
-# sns.histplot(cleaned_payments_df['payment_value'], kde=True)
-# plt.title("Penyebaran Nilai Pembayaran")
-# plt.xlabel("Nilai Pembayaran")
-# plt.ylabel("Frekuensi")
-# plt.show()
-
-# """**Insight:**
-# Membersihkan outlier yang ada pada kolom 'payment_value'.
-
 # ## Exploratory Data Analysis (EDA)
 
 # ### Explore Tabel order_items_df
@@ -1192,14 +807,395 @@ order_items_df, products_df, reviews_df, sellers_df, orders_df, geoloc_df, custo
 
 # Tampilan halaman "Data Wrangling"
 if page_choice == "Data Wrangling":
-    st.subheader("Data Wrangling")
-    st.write("### Dataset: Order Items")
-    st.dataframe(order_items_df.head())
-    st.write("### Informasi Data:")
-    buffer = []
-    order_items_df.info(buf=buffer)
-    info_str = "\n".join(buffer)
-    st.text(info_str)
+        
+    """## Data Wrangling
+    
+    ### Gathering Data
+    """
+    
+    order_items_df = pd.read_csv ("dataset/order_items_dataset.csv")
+    order_items_df.head()
+    
+    """**Fungsi:**
+    Berisi rincian barang yang dipesan.
+    """
+    
+    products_df = pd.read_csv ("dataset/products_dataset.csv")
+    products_df.head()
+    
+    """**Fungsi:**
+    Menyediakan informasi produk.
+    """
+    
+    reviews_df = pd.read_csv ("dataset/order_reviews_dataset.csv")
+    reviews_df.head()
+    
+    """**Fungsi:**
+    Berisi ulasan pelanggan.
+    """
+    
+    sellers_df = pd.read_csv ("dataset/sellers_dataset.csv")
+    sellers_df.head()
+    
+    """**Fungsi:**
+    Berisi informasi penjual.
+    """
+    
+    orders_df = pd.read_csv ("dataset/orders_dataset.csv")
+    orders_df.head()
+    
+    """**Fungsi:**
+    Berisi informasi terkait pesanan.
+    """
+    
+    geoloc_df = pd.read_csv ("dataset/geolocation_dataset.csv")
+    geoloc_df.head()
+    
+    """**Fungsi:**
+    Berisi data lokasi geografis.
+    """
+    
+    customers_df = pd.read_csv ("dataset/customers_dataset.csv")
+    customers_df.head()
+    
+    """**Fungsi:**
+    Berisi informasi pelanggan.
+    """
+    
+    payments_df = pd.read_csv ("dataset/order_payments_dataset.csv")
+    payments_df.head()
+    
+    """**Fungsi:**
+    Berisi detail pembayaran.
+    
+    ### Assessing Data
+    
+    ####Menilai Tabel order_items_df
+    """
+    
+    print("Informasi Tabel:")
+    print(order_items_df.info())
+    print("\nStatistik Deskriptif:")
+    print(order_items_df.describe())
+    print("\nJumlah Nilai Kosong:")
+    print(order_items_df.isnull().sum())
+    print("\nJumlah Baris Duplikat:")
+    print(order_items_df.duplicated().sum())
+    print("\nMengecek Harga Negatif (Kurang Dari 0):")
+    print(order_items_df[order_items_df['price'] < 0])
+    print("\nVisualisasi Outlier Kolom 'price':")
+    sns.boxplot(data=order_items_df, x='price')
+    plt.title("Boxplot Harga")
+    # plt.show()
+    st.pyplot(plt.gcf())
+    
+    """**Insight:**
+    - Tidak ada nilai kosong.
+    - Tidak ada duplikasi data.
+    - Tidak ada harga bernilai negatif.
+    - Menunjukkan potensi outlier, karena harga produk memiliki nilai maksimum yang sangat tinggi dan melebihi nilai pada kuartil tiga. Selain itu, biaya pengiriman juga memiliki nilai maksimum yang sangat tinggi dan melebihi nilai pada kuartil tiga.
+    
+    ####Menilai Tabel products_df
+    """
+    
+    print("Informasi Tabel:")
+    print(products_df.info())
+    print("\nJumlah Nilai Kosong:")
+    print(products_df.isnull().sum())
+    print("\nJumlah Baris Duplikat:")
+    print(products_df.duplicated().sum())
+    print("\nKategori Produk Unik:")
+    print("Jumlah =", products_df['product_category_name'].nunique())
+    print(products_df['product_category_name'].unique())
+    
+    """**Insight:**
+    - Terdapat kolom yang memiliki nilai kosong.
+    - Tidak ada duplikasi data.
+    - Terdapat nilai nan pada kategori produk.
+    
+    ####Menilai Tabel reviews_df
+    """
+    
+    print("Informasi Tabel:")
+    print(reviews_df.info())
+    print("\nJumlah Nilai Kosong:")
+    print(reviews_df.isnull().sum())
+    print("\nJumlah Baris Duplikat:")
+    print(reviews_df.duplicated().sum())
+    print("\nStatistik Skor Ulasan:")
+    print(reviews_df['review_score'].describe())
+    print("\nVisualisasi Penyebaran Skor Ulasan:")
+    sns.histplot(reviews_df['review_score'], bins=5, kde=False)
+    plt.title("Penyebaran Skor Ulasan")
+    plt.xlabel("Skor")
+    plt.ylabel("Frekuensi")
+    # plt.show()
+    st.pyplot(plt.gcf())
+    
+    """**Insight:**
+    - Terdapat kolom dengan nilai kosong yang jumlahnya cukup banyak.
+    - Tidak ada duplikasi data.
+    - Skor ulasan yang cenderung tinggi menunjukkan adanya kemungkinan bias data.
+    
+    ####Menilai Tabel sellers_df
+    """
+    
+    print("Informasi Tabel:")
+    print(sellers_df.info())
+    print("\nJumlah Nilai Kosong:")
+    print(sellers_df.isnull().sum())
+    print("\nJumlah Baris Duplikat:")
+    print(sellers_df.duplicated().sum())
+    print("\nValidasi Lokasi Penjual:")
+    print("Jumlah =", sellers_df['seller_zip_code_prefix'].nunique())
+    print(sellers_df['seller_zip_code_prefix'].unique())
+    
+    """**Insight:**
+    - Tidak ada kolom dengan nilai kosong.
+    - Tidak ada duplikasi data.
+    - Banyaknya jumlah lokasi penjual menunjukkan distribusi lokasi penjual yang beragam.
+    - Tabel sudah bersih dan dapat digunakan.
+    
+    ####Menilai Tabel orders_df
+    """
+    
+    print("Informasi Tabel:")
+    print(orders_df.info())
+    print("\nJumlah Nilai Kosong:")
+    print(orders_df.isnull().sum())
+    print("\nJumlah Baris Duplikat:")
+    print(orders_df.duplicated().sum())
+    print("\nValidasi Status Pesanan:")
+    print("Jumlah =", orders_df['order_status'].nunique())
+    print(orders_df['order_status'].unique())
+    
+    """**Insight:**
+    - Terdapat kolom dengan nilai kosong.
+    - Tidak ada dupilkasi data.
+    - Terdapat 8 kategori status pesanan.
+    
+    ####Menilai Tabel geoloc_df
+    """
+    
+    print("Informasi Tabel:")
+    print(geoloc_df.info())
+    print("\nJumlah Nilai Kosong:")
+    print(geoloc_df.isnull().sum())
+    print("\nJumlah Baris Duplikat:")
+    print(geoloc_df.duplicated().sum())
+    print("\nValidasi Kode Pos Unik:")
+    print("Jumlah =", geoloc_df['geolocation_zip_code_prefix'].nunique())
+    print(geoloc_df['geolocation_zip_code_prefix'].unique())
+    
+    """**Insight:**
+    - Tidak ada kolom dengan nilai kosong.
+    - Terdapat duplikasi data berdasarkan semua kolom.
+    
+    ####Menilai Tabel customers_df
+    """
+    
+    print("Informasi Tabel:")
+    print(customers_df.info())
+    print("\nJumlah Nilai Kosong:")
+    print(customers_df.isnull().sum())
+    print("\nJumlah Baris Duplikat:")
+    print(customers_df.duplicated().sum())
+    print("\nValidasi ID Pelanggan:")
+    print("Jumlah =", customers_df['customer_id'].nunique())
+    print(customers_df['customer_id'].unique())
+    
+    """**Insight:**
+    - Tidak terdapat kolom dengan nilai kosong.
+    - Tidak ada dupilkasi data.
+    - Tabel sudah bersih dan dapat digunakan.
+    
+    ####Menilai Tabel payments_df
+    """
+    
+    print("Informasi Tabel:")
+    print(payments_df.info())
+    print("\nJumlah Nilai Kosong:")
+    print(payments_df.isnull().sum())
+    print("\nJumlah Baris Duplikat:")
+    print(payments_df.duplicated().sum())
+    print("\nStatistik Jumlah Pembayaran:")
+    print(payments_df['payment_value'].describe())
+    print("\nVisualisasi Penyebaran Nilai Pembayaran:")
+    sns.histplot(payments_df['payment_value'], kde=True)
+    plt.title("Penyebaran Nilai Pembayaran")
+    plt.xlabel("Nilai Pembayaran")
+    plt.ylabel("Frekuensi")
+    # plt.show()
+    st.pyplot(plt.gcf())
+    
+    """**Insight:**
+    - Tidak terdapat kolom dengan nilai kosong.
+    - Tidak ada dupilkasi data.
+    - Menunjukkan potensi outlier, karena kolom 'payment_value' memiliki nilai maksimum yang sangat tinggi dan melebihi nilai pada kuartil tiga.
+    
+    ### Cleaning Data
+    
+    ####Membersihkan Tabel order_items_df
+    """
+    
+    #Mengatasi Potensi Outlier
+    Q1_price = order_items_df['price'].quantile(0.25)
+    Q3_price = order_items_df['price'].quantile(0.75)
+    IQR_price = Q3_price - Q1_price
+    
+    Q1_fr = order_items_df['freight_value'].quantile(0.25)
+    Q3_fr = order_items_df['freight_value'].quantile(0.75)
+    IQR_fr = Q3_fr - Q1_fr
+    
+    #Filter Outlier
+    cleaned_order_items_df = order_items_df[
+        (order_items_df['price'] >= (Q1_price - 1.5 * IQR_price)) &
+        (order_items_df['price'] <= (Q3_price + 1.5 * IQR_price)) &
+        (order_items_df['freight_value'] >= (Q1_fr - 1.5 * IQR_fr)) &
+        (order_items_df['freight_value'] <= (Q3_fr + 1.5 * IQR_fr))
+    ]
+    
+    print("Statistik Deskriptif Setelah Dibersihkan:")
+    cleaned_order_items_df.describe()
+    
+    """**Insight:**
+    Membersihkan outlier yang ada pada kolom 'price' dan 'freight_value'.
+    
+    ####Membersihkan Tabel products_df
+    """
+    
+    #Menyalin DataFrame
+    cleaned_products_df = products_df.copy()
+    
+    # Mengisi Nilai Kosong
+    if 'product_category_name' in cleaned_products_df.columns:
+        cleaned_products_df['product_category_name'] = cleaned_products_df['product_category_name'].fillna('unknown')
+    
+    cleaned_products_df[['product_name_lenght', 'product_description_lenght', 'product_photos_qty']] = cleaned_products_df[['product_name_lenght', 'product_description_lenght', 'product_photos_qty']].fillna(0)
+    
+    # Menghapus Baris dengan Nilai Kosong pada Kolom Ukuran Produk
+    important_columns = ['product_weight_g', 'product_length_cm', 'product_height_cm', 'product_width_cm']
+    cleaned_products_df = cleaned_products_df.dropna(subset=important_columns)
+    cleaned_products_df
+    
+    print(cleaned_products_df.head())
+    print("\nJumlah Nilai Kosong Setelah Pembersihan:")
+    print(cleaned_products_df.isna().sum())
+    print("\nKategori Produk Unik Setelah Pembersihan:")
+    print("Jumlah =", cleaned_products_df['product_category_name'].nunique())
+    print(cleaned_products_df['product_category_name'].unique())
+    
+    """**Insight:**
+    - Nilai kosong pada kolom kategori diisi dengan 'unknown'.
+    - Kolom dimensi produk yang kosong dihapus.
+    
+    ####Membersihkan Tabel reviews_df
+    """
+    
+    #Menyalin DataFrame
+    cleaned_reviews_df = reviews_df.copy()
+    
+    #Mengisi Nilai Kosong
+    cleaned_reviews_df[['review_comment_title', 'review_comment_message']] = cleaned_reviews_df[['review_comment_title', 'review_comment_message']].fillna('')
+    
+    print(cleaned_reviews_df.head())
+    print("\nJumlah Nilai Kosong Setelah Pembersihan:")
+    print(cleaned_reviews_df.isna().sum())
+    
+    """**Insight:**
+    Kolom ulasan yang kosong diisi dengan string kosong untuk menghindari kesalahan saat analisis data.
+    
+    ####Membersihkan Tabel orders_df
+    """
+    
+    # Mengisi Nilai Kosong dengan Placeholder
+    orders_df['order_status'] = orders_df['order_status'].fillna("unknown")
+    
+    # Mengubah Tipe Data dan Nilai pada Kolom Tanggal
+    date_col = [
+        'order_purchase_timestamp',
+        'order_approved_at',
+        'order_delivered_carrier_date',
+        'order_delivered_customer_date',
+        'order_estimated_delivery_date'
+    ]
+    
+    for col in date_col:
+        orders_df[col] = pd.to_datetime(orders_df[col], errors='coerce')  # Tipe Data Menjadi Datetime dan Nilai invalid Menjadi NaT
+        orders_df[col] = orders_df[col].fillna(pd.Timestamp("1970-01-01"))  # Ganti NaT dengan nilai default
+    
+    # Mengisi Nilai Kosong dengan Placeholder
+    orders_df['order_id'] = orders_df['order_id'].fillna("unknown")
+    orders_df['customer_id'] = orders_df['customer_id'].fillna("unknown")
+    
+    print("Data setelah cleaning:")
+    print(orders_df)
+    print(orders_df.info())
+    print(orders_df.isna().sum())
+    
+    #Memastikan Data pada Tiap Status Tidak Terhapus
+    for status in orders_df['order_status'].unique():
+        print(f"Contoh data untuk order_status: {status}")
+        print(orders_df[orders_df['order_status'] == status].head(), "\n")
+    
+    """**Insight:**
+    Mengubah tipe data dengan tipe yang lebih sesuai dan mengisi nilai kosong pada tiap kolom dengan placeholder agar data dapat digunakan untuk analisis.
+    
+    ####Membersihkan Tabel geoloc_df
+    """
+    
+    print("Memeriksa Baris Duplikat:")
+    print(geoloc_df.duplicated())
+    
+    # Menambahkan Kolom 'frequency' untuk Menghitung Kemunculan Tiap Kombinasi Unik
+    geoloc_df['frequency'] = geoloc_df.groupby(list(geoloc_df.columns)).transform('size')
+    
+    # Menghapus Baris Duplikasi
+    geoloc_df = geoloc_df.drop_duplicates()
+    
+    print("\n Isi Tabel Setelah Dibersihkan:")
+    print(geoloc_df.head())
+    print("\nInformasi Tabel:")
+    print(geoloc_df.info())
+    print("\nJumlah Nilai Kosong:")
+    print(geoloc_df.isnull().sum())
+    print("\nJumlah Baris Duplikat:")
+    print(geoloc_df.duplicated().sum())
+    print("\nValidasi Kode Pos Unik:")
+    print("Jumlah =", geoloc_df['geolocation_zip_code_prefix'].nunique())
+    print(geoloc_df['geolocation_zip_code_prefix'].unique())
+    
+    """**Insight:**
+    - Menambahkan kolom baru bernama 'frequency' untuk menghitung kemunculan tiap kombinasi unik.
+    - Menghapus dupilkasi data.
+    
+    ####Membersihkan Tabel payments_df
+    """
+    
+    #Mengatasi Potensi Outlier
+    Q1_payment = payments_df['payment_value'].quantile(0.25)
+    Q3_payment = payments_df['payment_value'].quantile(0.75)
+    IQR_payment = Q3_payment - Q1_payment
+    
+    #Filter Outlier
+    cleaned_payments_df = payments_df[
+        (payments_df['payment_value'] >= (Q1_payment - 1.5 * IQR_payment)) &
+        (payments_df['payment_value'] <= (Q3_payment + 1.5 * IQR_payment))
+    ]
+    
+    print("Statistik Deskriptif Setelah Dibersihkan:")
+    cleaned_payments_df.describe()
+    
+    print("\nVisualisasi Penyebaran Nilai Pembayaran Setelah Dibersihkan:")
+    sns.histplot(cleaned_payments_df['payment_value'], kde=True)
+    plt.title("Penyebaran Nilai Pembayaran")
+    plt.xlabel("Nilai Pembayaran")
+    plt.ylabel("Frekuensi")
+    # plt.show()
+    st.pyplot(plt.gcf())
+    """**Insight:**
+    Membersihkan outlier yang ada pada kolom 'payment_value'.
+
 
 # Halaman "EDA"
 elif page_choice == "EDA":
