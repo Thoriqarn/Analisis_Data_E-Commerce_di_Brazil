@@ -1108,6 +1108,103 @@ plt.legend()
 plt.grid(True)
 plt.show()
 
+# Menjalankan pada Streamlit
+# Judul Aplikasi
+st.title("Dashboard Analisis Data E-Commerce di Brazil")
+
+# Sidebar Navigasi
+st.sidebar.title("Navigasi")
+option = st.sidebar.selectbox(
+    "Pilih Analisis:",
+    [
+        "Pendahuluan",
+        "Pembersihan Data",
+        "Analisis Data (EDA)",
+        "Analisis RFM",
+        "Analisis Geospasial",
+    ]
+)
+
+# Load Dataset
+@st.cache
+def load_data():
+    order_items_df = pd.read_csv("dataset/order_items_dataset.csv")
+    products_df = pd.read_csv("dataset/products_dataset.csv")
+    reviews_df = pd.read_csv("dataset/order_reviews_dataset.csv")
+    sellers_df = pd.read_csv("dataset/sellers_dataset.csv")
+    orders_df = pd.read_csv("dataset/orders_dataset.csv")
+    geoloc_df = pd.read_csv("dataset/geolocation_dataset.csv")
+    customers_df = pd.read_csv("dataset/customers_dataset.csv")
+    payments_df = pd.read_csv("dataset/order_payments_dataset.csv")
+    return (order_items_df, products_df, reviews_df, sellers_df, orders_df, geoloc_df, customers_df, payments_df)
+
+order_items_df, products_df, reviews_df, sellers_df, orders_df, geoloc_df, customers_df, payments_df = load_data()
+
+# Pendahuluan
+if option == "Pendahuluan":
+    st.subheader("Pendahuluan")
+    st.write("Proyek ini bertujuan untuk menganalisis data e-commerce di Brasil menggunakan berbagai metode analitik. Data mencakup informasi pesanan, produk, ulasan, penjual, dan pelanggan.")
+
+# Pembersihan Data
+elif option == "Pembersihan Data":
+    st.subheader("Pembersihan Data")
+    st.write("Tabel Order Items Sebelum Dibersihkan:")
+    st.dataframe(order_items_df.head())
+
+    # Cleaning data contoh (seperti pada skrip Anda)
+    cleaned_order_items_df = order_items_df[order_items_df['price'] > 0]
+    st.write("Tabel Order Items Setelah Dibersihkan:")
+    st.dataframe(cleaned_order_items_df.head())
+
+# Analisis Data (EDA)
+elif option == "Analisis Data (EDA)":
+    st.subheader("Analisis Data (EDA)")
+
+    # Contoh: Distribusi Harga
+    st.write("Distribusi Harga Barang dalam Pesanan:")
+    fig, ax = plt.subplots()
+    sns.histplot(cleaned_order_items_df['price'], bins=30, kde=True, ax=ax)
+    plt.title("Penyebaran Harga Barang dalam Pesanan")
+    st.pyplot(fig)
+
+    # Analisis Produk Terlaris
+    st.write("Top 10 Produk Terlaris:")
+    top_products = (
+        cleaned_order_items_df.groupby("product_id")["order_item_id"].count().nlargest(10)
+    )
+    st.dataframe(top_products)
+
+# Analisis RFM
+elif option == "Analisis RFM":
+    st.subheader("Analisis RFM")
+    st.write("Segmentasi pelanggan berdasarkan Recency, Frequency, dan Monetary.")
+
+    # Contoh perhitungan RFM (berdasarkan skrip Anda)
+    latest_order_date = pd.to_datetime(orders_df['order_purchase_timestamp']).max()
+    rfm = customers_df.merge(orders_df, on='customer_id').merge(order_items_df, on='order_id')
+    rfm['recency'] = (latest_order_date - pd.to_datetime(rfm['order_purchase_timestamp'])).dt.days
+    rfm_frequency = rfm.groupby('customer_unique_id')['order_id'].nunique().reset_index()
+    rfm_frequency.rename(columns={'order_id': 'frequency'}, inplace=True)
+    rfm_monetary = rfm.groupby('customer_unique_id')['price'].sum().reset_index()
+    rfm_monetary.rename(columns={'price': 'monetary'}, inplace=True)
+    rfm_combined = rfm[['customer_unique_id', 'recency']].drop_duplicates()
+    rfm_combined = rfm_combined.merge(rfm_frequency, on='customer_unique_id').merge(rfm_monetary, on='customer_unique_id')
+
+    st.write("Data RFM:")
+    st.dataframe(rfm_combined.head())
+
+# Analisis Geospasial
+elif option == "Analisis Geospasial":
+    st.subheader("Analisis Geospasial")
+    st.write("Peta Distribusi Pelanggan di Brasil.")
+
+    # Data Geospasial (dari geoloc_df)
+    customer_locations = customers_df.merge(geoloc_df, left_on='customer_zip_code_prefix', right_on='geolocation_zip_code_prefix')
+    st.map(customer_locations[['geolocation_lat', 'geolocation_lng']])
+
+# Footer
+st.sidebar.info("Aplikasi ini dibuat menggunakan Streamlit.")
+
 """**Insight:**
 - Titik-titik yang lebih padat pada peta menunjukkan area dengan konsentrasi pelanggan yang lebih tinggi. Lokasi ini bisa menjadi indikasi bahwa area tersebut memiliki permintaan yang lebih besar atau lebih banyak pelanggan yang melakukan pembelian.
 
