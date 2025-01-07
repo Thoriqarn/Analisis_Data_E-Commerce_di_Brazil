@@ -926,9 +926,9 @@ if page_choice == "Data Wrangling":
     print(reviews_df['review_score'].describe())
     print("\nVisualisasi Penyebaran Skor Ulasan:")
     sns.histplot(reviews_df['review_score'], bins=5, kde=False)
-    st.title("Penyebaran Skor Ulasan")
-    st.xlabel("Skor")
-    st.ylabel("Frekuensi")
+    plt.title("Penyebaran Skor Ulasan")
+    plt.xlabel("Skor")
+    plt.ylabel("Frekuensi")
     # st.show()
     st.pyplot(plt.fig)
     
