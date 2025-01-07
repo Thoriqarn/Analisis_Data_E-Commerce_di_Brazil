@@ -1029,7 +1029,9 @@ if page_choice == "Data Wrangling":
     plt.xlabel("Nilai Pembayaran")
     plt.ylabel("Frekuensi")
     # plt.show()
-    st.pyplot(plt.gcf())
+    fig, ax = plt.subplots()
+    ax.hist(payments_df['payment_value'])
+    st.pyplot(fig)
     
     """**Insight:**
     - Tidak terdapat kolom dengan nilai kosong.
